@@ -10,12 +10,12 @@ export class ProjectsController {
     return this.projectService.createProject();
   }
 
-  @Get()
+  @Get('/:projectId')
   getProjectWithUsersAndIssues() {
     return this.projectService.getProjectWithUsersAndIssues();
   }
 
-  @Put()
+  @Put('/:projectId')
   updateProject() {
     return this.projectService.updateProject();
   }
