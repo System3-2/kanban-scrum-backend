@@ -1,0 +1,113 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum IssueType {
+  bug
+  task
+  feature
+}
+enum IssueStatus {
+  backlog
+  selected
+  inprogress
+  done
+}
+enum IssuePriority {
+  highest
+  high
+  medium
+  low
+  lowest
+}
+enum ProjectCategory {
+  software
+  marketing
+  business
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String @unique
+  hash  String
+  avatarUrl String?   @db.VarChar(2000)
+  createdAt DateTime @default(now())
+
+  // Relationships
+  comments  Comment[]
+  issues    Issue[] 
+  project   Project? @relation(fields: [projectId], references: [id])
+  projectId Int?
+
+  // Table mapping
+  @@map("users")
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  body      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  userId    Int
+  issueId   Int
+
+  // Relationships
+  user      User     @relation(fields: [userId], references: [id])
+  issue     Issue    @relation(fields: [issueId], references: [id], onDelete: Cascade)
+
+  // Table mapping
+  @@map("comments")
+}
+
+model Issue {
+ id             Int       @id @default(autoincrement())
+  title          String
+  type           IssueType
+  status         IssueStatus
+  priority       IssuePriority
+  listPosition   Float
+  description    String?
+  descriptionText String?
+  estimate       Int?
+  timeSpent      Int?
+  timeRemaining  Int?
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+  reporterId     Int
+  projectId      Int
+  userIds        Int[]
+
+  // Relationships
+  project        Project   @relation(fields: [projectId], references: [id])
+  comments       Comment[]
+  users          User[]    
+  
+  // Table mapping
+  @@map("issues")
+}
+
+model Project {
+  id          Int      @id @default(autoincrement())
+  name        String
+  url         String?
+  description String?
+  category    ProjectCategory
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  // Relationships
+  issues Issue[]
+  users  User[]
+
+  // Table mapping
+  @@map("projects")
+}
