@@ -1,4 +1,4 @@
-import { Controller, Delete, Post, Put } from '@nestjs/common';
+import { Controller, Delete, Patch, Post } from '@nestjs/common';
 import { CommentsService } from './comments.service';
 
 @Controller('comments')
@@ -10,7 +10,7 @@ export class CommentsController {
     return this.commentsService.createComment();
   }
 
-  @Put('/:commentId')
+  @Patch('/:commentId')
   updateComment() {
     return this.commentsService.updateComment();
   }

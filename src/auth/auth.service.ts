@@ -55,6 +55,7 @@ export class AuthService {
       });
       return user;
     } catch (error) {
+      console.log(error.message)
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
           throw new HttpException(

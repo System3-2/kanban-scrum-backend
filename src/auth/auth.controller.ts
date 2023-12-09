@@ -10,14 +10,12 @@ export class AuthController {
   @SkipAuthorization()
   @Post('/signup')
   signUp(@Body() body: SignUpDto) {
-    console.log(body);
     return this.authService.signUp(body);
   }
 
   @SkipAuthorization()
   @Post('/login')
   login(@Body() body: LoginDto) {
-    console.log(body);
     return this.authService.login(body);
   }
 }

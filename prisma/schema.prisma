@@ -11,45 +11,49 @@ datasource db {
 }
 
 enum IssueType {
-  bug
-  task
-  feature
+  BUG
+  TASK
+  FEATURE
 }
+
 enum IssueStatus {
-  backlog
-  selected
-  inprogress
-  done
+  BACKLOG
+  SELECTED
+  INPROGRESS
+  DONE
 }
+
 enum IssuePriority {
-  highest
-  high
-  medium
-  low
-  lowest
+  HIGHEST
+  HIGH
+  MEDIUM
+  LOW
+  LOWEST
 }
+
 enum ProjectCategory {
-  software
-  marketing
-  business
+  SOFTWARE
+  MARKETING
+  BUSINESS
 }
 
 model User {
   id        Int      @id @default(autoincrement())
   name      String
-  email     String @unique
-  hash  String
-  avatarUrl String?   @db.VarChar(2000)
+  email     String
+  hash      String
+  avatarUrl String?  @db.VarChar(2000)
   createdAt DateTime @default(now())
 
   // Relationships
   comments  Comment[]
-  issues    Issue[] 
-  project   Project? @relation(fields: [projectId], references: [id])
+  issues    Issue[]
+  project   Project?  @relation(fields: [projectId], references: [id])
   projectId Int?
 
   // Table mapping
   @@map("users")
+  @@unique([email])
 }
 
 model Comment {
@@ -61,53 +65,56 @@ model Comment {
   issueId   Int
 
   // Relationships
-  user      User     @relation(fields: [userId], references: [id])
-  issue     Issue    @relation(fields: [issueId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id])
+  issue Issue @relation(fields: [issueId], references: [id], onDelete: Cascade)
 
+  @@unique([id])
   // Table mapping
   @@map("comments")
 }
 
 model Issue {
- id             Int       @id @default(autoincrement())
-  title          String
-  type           IssueType
-  status         IssueStatus
-  priority       IssuePriority
-  listPosition   Float
-  description    String?
+  id              Int           @id @default(autoincrement())
+  title           String
+  type            IssueType
+  status          IssueStatus
+  priority        IssuePriority
+  listPosition    Float
+  description     String?
   descriptionText String?
-  estimate       Int?
-  timeSpent      Int?
-  timeRemaining  Int?
-  createdAt      DateTime  @default(now()) @map("created_at")
-  updatedAt      DateTime  @updatedAt @map("updated_at")
-  reporterId     Int
-  projectId      Int
-  userIds        Int[]
+  estimate        Int?
+  timeSpent       Int?
+  timeRemaining   Int?
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+  reporterId      Int
+  projectId       Int
+  userIds         Int[]
 
   // Relationships
-  project        Project   @relation(fields: [projectId], references: [id])
-  comments       Comment[]
-  users          User[]    
-  
+  project  Project   @relation(fields: [projectId], references: [id])
+  comments Comment[]
+  users    User[]
+
+  @@unique([id])
   // Table mapping
   @@map("issues")
 }
 
 model Project {
-  id          Int      @id @default(autoincrement())
+  id          Int             @id @default(autoincrement())
   name        String
   url         String?
   description String?
   category    ProjectCategory
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  createdAt   DateTime        @default(now()) @map("created_at")
+  updatedAt   DateTime        @updatedAt @map("updated_at")
 
   // Relationships
   issues Issue[]
   users  User[]
 
+  @@unique([id])
   // Table mapping
   @@map("projects")
 }

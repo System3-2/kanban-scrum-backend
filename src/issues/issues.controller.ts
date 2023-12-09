@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, Post, Put } from '@nestjs/common';
+import { Controller, Delete, Get, Patch, Post } from '@nestjs/common';
 import { IssuesService } from './issues.service';
 
 @Controller('issues')
@@ -20,7 +20,7 @@ export class IssuesController {
     return this.issuesService.createIssues();
   }
 
-  @Put('/:issueId')
+  @Patch('/:issueId')
   updateIssue() {
     return this.issuesService.updateIssue();
   }
