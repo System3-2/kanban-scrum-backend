@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { DatabaseService } from 'src/database/database.service';
-import { CreateProjectDto, UpdateProjectDto } from 'src/dto/projectDto';
+import { CreateProjectDto, UpdateProjectDto } from 'src/dto/project.dto';
 
 @Injectable()
 export class ProjectsService {
@@ -48,7 +48,6 @@ export class ProjectsService {
             select: {
               name: true,
               email: true,
-              comments: true,
               avatarUrl: true,
               issues: true,
             },
@@ -112,7 +111,6 @@ export class ProjectsService {
             select: {
               name: true,
               email: true,
-              comments: true,
               avatarUrl: true,
               issues: true,
             },

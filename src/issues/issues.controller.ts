@@ -1,32 +1,44 @@
-import { Controller, Delete, Get, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Patch,
+  Post,
+  Param,
+  Request,
+  Query,
+} from '@nestjs/common';
 import { IssuesService } from './issues.service';
+import { IssueDto, IssueQueryDto, IssueUpdateDto } from 'src/dto/issues.dto';
 
 @Controller('issues')
 export class IssuesController {
   constructor(private issuesService: IssuesService) {}
 
   @Get()
-  getProjectIssues() {
-    return this.issuesService.getProjectIssues();
+  getProjectIssues(@Request() req, @Query() query: IssueQueryDto) {
+    return this.issuesService.getProjectIssue(req.user, query)
+    
   }
 
   @Get('/:issueId')
-  getIssueWithUsersAndComments() {
-    return this.issuesService.getIssueWithUsersAndComments();
+  getIssueWithUsersAndComments(@Param('issueId') issueId: number) {
+    return this.issuesService.getIssueWithUsersAndComments(issueId);
   }
 
   @Post('/create')
-  createIssues() {
-    return this.issuesService.createIssues();
+  createIssues(@Body() body: IssueDto) {
+    return this.issuesService.createIssues(body);
   }
 
   @Patch('/:issueId')
-  updateIssue() {
-    return this.issuesService.updateIssue();
+  updateIssue(@Body() body: IssueUpdateDto, @Param('issueId') issueId: number) {
+    return this.issuesService.updateIssue(body, issueId);
   }
 
   @Delete('/:issueId')
-  deleteIssue() {
-    return this.issuesService.deleteIssue();
+  deleteIssue(@Param('issueId') issueId: number) {
+    return this.issuesService.deleteIssue(issueId);
   }
 }

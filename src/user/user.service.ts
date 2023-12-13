@@ -21,7 +21,6 @@ export class UserService {
           name: true,
           email: true,
           avatarUrl: true,
-          comments: true,
           issues: true,
           project: {
             select: {

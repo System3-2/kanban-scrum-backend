@@ -46,7 +46,6 @@ model User {
   createdAt DateTime @default(now())
 
   // Relationships
-  comments  Comment[]
   issues    Issue[]
   project   Project?  @relation(fields: [projectId], references: [id])
   projectId Int?
@@ -61,11 +60,9 @@ model Comment {
   body      String
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
-  userId    Int
   issueId   Int
 
   // Relationships
-  user  User  @relation(fields: [userId], references: [id])
   issue Issue @relation(fields: [issueId], references: [id], onDelete: Cascade)
 
   @@unique([id])
@@ -79,7 +76,6 @@ model Issue {
   type            IssueType
   status          IssueStatus
   priority        IssuePriority
-  listPosition    Float
   description     String?
   descriptionText String?
   estimate        Int?
@@ -87,9 +83,9 @@ model Issue {
   timeRemaining   Int?
   createdAt       DateTime      @default(now()) @map("created_at")
   updatedAt       DateTime      @updatedAt @map("updated_at")
-  reporterId      Int
+  reporterId      Int?
   projectId       Int
-  userIds         Int[]
+  // userIds         Int[]
 
   // Relationships
   project  Project   @relation(fields: [projectId], references: [id])
