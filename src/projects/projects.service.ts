@@ -49,7 +49,6 @@ export class ProjectsService {
               name: true,
               email: true,
               avatarUrl: true,
-              issues: true,
             },
           },
           issues: true,
@@ -120,7 +119,7 @@ export class ProjectsService {
       });
 
       if (!project) throw new NotFoundException('Project does not exist');
-      return { project, message: 'User added to project' };
+      return { message: 'User added to project' };
     } catch (error) {
       console.log(error);
       throw new NotFoundException(error);

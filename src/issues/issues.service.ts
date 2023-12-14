@@ -147,10 +147,17 @@ export class IssuesService {
     const user = await this.db.user.findUnique({
       where: { id: body.user.id },
     });
+    console.log({user})
     const issue = await this.db.issue.findMany({
-      where: { projectId: user.projectId, te },
-      
+      where: {
+        id: user.projectId,
+        OR: [
+          { title: { contains: query.description, mode: 'insensitive' } },
+          { description: { contains: query.description, mode: 'insensitive' } },
+          // Add other fields you want to search on
+        ],
+      },
     });
-    return user.id;
+    return issue;
   }
 }
