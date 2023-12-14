@@ -1,23 +1,35 @@
-import { Controller, Delete, Patch, Post, Body } from '@nestjs/common';
+import {
+  Controller,
+  Delete,
+  Patch,
+  Post,
+  Body,
+  Param,
+  HttpCode,
+  HttpStatus,
+} from '@nestjs/common';
 import { CommentsService } from './comments.service';
-import { CommentDto } from 'src/dto/comment.dto';
+import { CommentDto, CommentUpdateDto } from 'src/dto/comment.dto';
 
 @Controller('comments')
 export class CommentsController {
   constructor(private commentsService: CommentsService) {}
 
   @Post('/create')
+  @HttpCode(HttpStatus.CREATED)
   createComment(@Body() body: CommentDto) {
     return this.commentsService.createComment(body);
   }
 
   @Patch('/:commentId')
-  updateComment() {
-    return this.commentsService.updateComment();
+  @HttpCode(HttpStatus.NO_CONTENT)
+  updateComment(@Param('commentId') commentId: number, @Body() body: CommentUpdateDto) {
+    return this.commentsService.updateComment(commentId, body);
   }
 
   @Delete('/:commentId')
-  deleteComment() {
-    return this.commentsService.deleteComment();
+  @HttpCode(HttpStatus.OK)
+  deleteComment(@Param('commentId') commentId: number) {
+    return this.commentsService.deleteComment(commentId);
   }
 }

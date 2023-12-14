@@ -29,9 +29,6 @@ export class IssueDto {
   @IsNumber()
   @IsOptional()
   timeRemaining: number;
-
-  @IsNumber()
-  projectId: number;
 }
 
 export class IssueUpdateDto {
@@ -71,7 +68,6 @@ export class IssueId {
   @IsInt()
   id: number;
 }
-
 
 export class IssueQueryDto {
   @IsString()

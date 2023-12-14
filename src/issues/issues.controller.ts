@@ -19,10 +19,15 @@ export class IssuesController {
   constructor(private issuesService: IssuesService) {}
 
   @HttpCode(HttpStatus.OK)
+  @Get('/all')
+  getAll() {
+    return this.issuesService.getAll();
+  }
+
+  @HttpCode(HttpStatus.OK)
   @Get()
   getProjectIssues(@Request() req, @Query() query: IssueQueryDto) {
-    return this.issuesService.getProjectIssue(req.user, query)
-    
+    return this.issuesService.getProjectIssue(req.user, query);
   }
 
   @HttpCode(HttpStatus.OK)
@@ -33,11 +38,12 @@ export class IssuesController {
 
   @HttpCode(HttpStatus.CREATED)
   @Post('/create')
-  createIssues(@Body() body: IssueDto) {
-    return this.issuesService.createIssues(body);
+  createIssues(@Body() body: IssueDto, @Request() req) {
+    // console.log(req.user)
+    return this.issuesService.createIssues(body, req.user);
   }
 
-  @HttpCode(HttpStatus.CREATED)
+  @HttpCode(HttpStatus.NO_CONTENT)
   @Patch('/:issueId')
   updateIssue(@Body() body: IssueUpdateDto, @Param('issueId') issueId: number) {
     return this.issuesService.updateIssue(body, issueId);

@@ -16,21 +16,21 @@ import { CreateProjectDto, UpdateProjectDto } from 'src/dto/project.dto';
 export class ProjectsController {
   constructor(private projectService: ProjectsService) {}
 
-  @HttpCode(HttpStatus.CREATED)
   @Post('/create')
+  @HttpCode(HttpStatus.CREATED)
   createProject(@Body() body: CreateProjectDto, @Request() req) {
     return this.projectService.createProject(body, req);
   }
 
-  @HttpCode(HttpStatus.OK)
   @Get('/:projectId')
+  @HttpCode(HttpStatus.OK)
   getProjectWithUsersAndIssues(@Param('projectId') projectId: number) {
     console.log('controller', { projectId });
     return this.projectService.getProjectWithUsersAndIssues(projectId);
   }
 
-  @HttpCode(HttpStatus.CREATED)
   @Patch('/:projectId')
+  @HttpCode(HttpStatus.NO_CONTENT)
   updateProject(
     @Param('projectId') projectId: number,
     @Body() body: UpdateProjectDto,
@@ -38,8 +38,8 @@ export class ProjectsController {
     return this.projectService.updateProject(projectId, body);
   }
 
-  @HttpCode(HttpStatus.CREATED)
   @Get('/:projectId/:userId')
+  @HttpCode(HttpStatus.CREATED)
   addUsertoProject(@Param('projectId') projectId: number, @Request() req) {
     return this.projectService.addUserToProject(projectId, req.user.user.id);
   }
