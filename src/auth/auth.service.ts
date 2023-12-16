@@ -45,6 +45,7 @@ export class AuthService {
           email: body.email,
           hash: hash,
           name: body.name,
+          avatarUrl: body.avatarUrl,
         },
         select: {
           id: true,

@@ -1,4 +1,11 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto, SignUpDto } from 'src/dto/auth.dto';
 import { SkipAuthorization } from './skip-auth.decorator';
@@ -19,4 +26,12 @@ export class AuthController {
   login(@Body() body: LoginDto) {
     return this.authService.login(body);
   }
+
+  // @Get()
+  // @Header('Content-Type', 'application/json')
+  // @Header('Content-Disposition', 'attachment; filename="package.json"')
+  // streamFile():StreamableFile{
+  //   const file = createReadStream(join(process.cwd(), 'package.json'));
+  //   return new StreamableFile(file)
+  // }
 }

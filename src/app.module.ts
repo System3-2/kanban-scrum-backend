@@ -10,6 +10,7 @@ import { CommentsModule } from './comments/comments.module';
 import { IssuesModule } from './issues/issues.module';
 import { UserModule } from './user/user.module';
 import { AppController } from './app.controller';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { AppController } from './app.controller';
     CommentsModule,
     IssuesModule,
     UserModule,
+    CloudinaryModule,
   ],
   controllers: [AppController],
   providers: [
