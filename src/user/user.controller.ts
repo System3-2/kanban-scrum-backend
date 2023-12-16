@@ -43,9 +43,9 @@ export class UserController {
     file: Express.Multer.File,
     @Request() req
   ) {
-    console.log(req.user)
     const upload = await this.cloudinaryService.uploadProfile(file);
-    console.log({ upload });
+    // console.log({ upload });
+    await this.userService.updateUser(upload, req.user)
     return 'file upload successful';
   }
 }

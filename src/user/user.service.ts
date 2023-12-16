@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { DatabaseService } from 'src/database/database.service';
 
 interface User {
@@ -36,6 +36,20 @@ export class UserService {
       return currentUser;
     } catch (error) {
       throw new NotFoundException(error);
+    }
+  }
+
+  async updateUser(body, user) {
+    try {
+      const result = await this.db.user.update({
+        where: { email: user.email },
+        data: {
+          avatarUrl: body.secure_url,
+        },
+      });
+      return result
+    } catch (error) {
+      throw new BadRequestException(error);
     }
   }
 }
