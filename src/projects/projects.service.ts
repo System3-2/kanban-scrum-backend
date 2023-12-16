@@ -3,13 +3,14 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { DatabaseService } from 'src/database/database.service';
 import { CreateProjectDto, UpdateProjectDto } from 'src/dto/project.dto';
 
 @Injectable()
 export class ProjectsService {
   constructor(private db: DatabaseService) {}
-  async createProject(body: CreateProjectDto, req: any) {
+  async createProject(body: CreateProjectDto ) {
     try {
       const project = await this.db.project.create({
         data: {
@@ -118,10 +119,12 @@ export class ProjectsService {
         },
       });
 
-      if (!project) throw new NotFoundException('Project does not exist');
       return { message: 'User added to project' };
     } catch (error) {
       console.log(error);
+      if(error instanceof PrismaClientKnownRequestError) {
+        if(error.code === 'P2025') throw new NotFoundException('User or Project does not exist')
+      }
       throw new NotFoundException(error);
     }
   }

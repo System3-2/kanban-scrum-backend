@@ -3,7 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { PrismaClientKnownRequestError, PrismaClientValidationError } from '@prisma/client/runtime/library';
 import { DatabaseService } from 'src/database/database.service';
 import { IssueDto, IssueQueryDto, IssueUpdateDto } from 'src/dto/issues.dto';
 
@@ -51,17 +51,13 @@ export class IssuesService {
 
   async createIssues(body: IssueDto, user: any) {
     try {
-      const userInfo = await this.db.user.findUnique({
-        where: { email: user.user.email },
-      });
-      console.log(userInfo);
       const issues = await this.db.issue.create({
         data: {
           title: body.title,
           type: body.type,
           status: body.status,
           priority: body.priority,
-          projectId: userInfo.projectId,
+          projectId: user.projectId,
           description: body.description,
           descriptionText: body.descriptionText,
         },
@@ -148,22 +144,27 @@ export class IssuesService {
   }
 
   async getProjectIssue(body: any, query: IssueQueryDto) {
-    console.log({ query });
-    const user = await this.db.user.findUnique({
-      where: { id: body.user.id },
-    });
-    console.log({ user });
-    const issue = await this.db.issue.findMany({
-      where: {
-        projectId: user.projectId,
-        OR: [
-          { title: { contains: query.description, mode: 'insensitive' } },
-          { description: { contains: query.description, mode: 'insensitive' } },
-          // Add other fields you want to search on
-        ],
-      },
-    });
-    return issue;
+    console.log({ body });
+    try {
+      const issue = await this.db.issue.findMany({
+        where: {
+          projectId: body.projectId,
+          OR: [
+            { title: { contains: query.description, mode: 'insensitive' } },
+            {
+              description: { contains: query.description, mode: 'insensitive' },
+            },
+            // Add other fields you want to search on
+          ],
+        },
+      });
+      return issue;
+    } catch (error) {
+      if(error instanceof PrismaClientValidationError) {
+      throw new NotFoundException('User does not belong to the project')
+      }
+      throw new BadRequestException(error);
+    }
   }
 
   async getAll() {
@@ -189,7 +190,7 @@ export class IssuesService {
           },
         },
       });
-      return issues
+      return issues;
     } catch (error) {
       throw new BadRequestException(error);
     }

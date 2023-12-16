@@ -18,8 +18,8 @@ export class ProjectsController {
 
   @Post('/create')
   @HttpCode(HttpStatus.CREATED)
-  createProject(@Body() body: CreateProjectDto, @Request() req) {
-    return this.projectService.createProject(body, req);
+  createProject(@Body() body: CreateProjectDto ) {
+    return this.projectService.createProject(body);
   }
 
   @Get('/:projectId')
@@ -41,6 +41,6 @@ export class ProjectsController {
   @Get('/:projectId/:userId')
   @HttpCode(HttpStatus.CREATED)
   addUsertoProject(@Param('projectId') projectId: number, @Request() req) {
-    return this.projectService.addUserToProject(projectId, req.user.user.id);
+    return this.projectService.addUserToProject(projectId, req.user.id);
   }
 }

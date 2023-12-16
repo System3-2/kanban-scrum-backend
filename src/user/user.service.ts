@@ -12,10 +12,9 @@ export class UserService {
   constructor(private db: DatabaseService) {}
 
   async getCurrentUser(user: any) {
-    console.log({ user });
     try {
       const currentUser = await this.db.user.findUnique({
-        where: { email: user.user.email },
+        where: { email: user.email },
         select: {
           id: true,
           name: true,

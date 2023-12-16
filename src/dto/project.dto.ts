@@ -1,7 +1,5 @@
 import { IsEnum, IsOptional, IsString, IsUrl } from 'class-validator';
 import { ProjectCategory } from '@prisma/client';
-console.log(ProjectCategory);
-
 export class CreateProjectDto {
   @IsString()
   name: string;

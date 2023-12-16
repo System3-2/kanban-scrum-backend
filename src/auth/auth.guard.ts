@@ -7,18 +7,20 @@ import {
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
+import { DatabaseService } from 'src/database/database.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
     private jwt: JwtService,
     private readonly reflector: Reflector,
+    private db: DatabaseService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const skipAuth = this.reflector.get<boolean>(
+    const skipAuth = this.reflector.getAllAndMerge(
       'SkipAuth',
-      context.getHandler(),
+      [context.getHandler(), context.getClass()]
     );
 
     if (skipAuth) return true;
@@ -31,7 +33,21 @@ export class AuthGuard implements CanActivate {
       const payload = this.jwt.verify(token, {
         secret: process.env.JWT_SECRET,
       });
-      request['user'] = payload;
+      // console.log({ payload });
+      const user = await this.db.user.findUnique({
+        where: {
+          email: payload.user.email,
+        },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          avatarUrl: true,
+          projectId: true,
+        }
+      });
+      console.log({ user });
+      request['user'] = user;
     } catch (error) {
       throw new UnauthorizedException();
     }
