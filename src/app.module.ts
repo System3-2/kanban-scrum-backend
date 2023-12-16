@@ -9,6 +9,7 @@ import { AuthGuard } from './auth/auth.guard';
 import { CommentsModule } from './comments/comments.module';
 import { IssuesModule } from './issues/issues.module';
 import { UserModule } from './user/user.module';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -27,7 +28,7 @@ import { UserModule } from './user/user.module';
     IssuesModule,
     UserModule,
   ],
-  controllers: [],
+  controllers: [AppController],
   providers: [
     JwtService,
     {
