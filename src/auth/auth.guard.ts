@@ -18,9 +18,9 @@ export class AuthGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const skipAuth = this.reflector.getAllAndMerge(
+    const skipAuth = this.reflector.get<boolean>(
       'SkipAuth',
-      [context.getHandler(), context.getClass()]
+      context.getClass(),
     );
 
     if (skipAuth) return true;

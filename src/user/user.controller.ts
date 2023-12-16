@@ -5,7 +5,7 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private userService: UserService) {}
 
-  @HttpCode(HttpStatus.CREATED)
+  @HttpCode(HttpStatus.OK)
   @Get()
   getCurrentUser(@Request() req): any {
     return this.userService.getCurrentUser(req.user);
