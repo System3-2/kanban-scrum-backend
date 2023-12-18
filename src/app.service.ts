@@ -31,9 +31,8 @@ export class AppService {
       to: 'olojam4969@gmail.com',
       // from: '"Support Team" <support@example.com>', // override default from
       subject: 'Welcome to Nice App! Confirm your Email',
-      template: './logs.hbs', // `.hbs` extension is appended automatically
+      template: './logs.hbs', 
       context: {
-        // ✏️ filling curly brackets with content
         name: 'Kanban support',
       },
       attachments: [
