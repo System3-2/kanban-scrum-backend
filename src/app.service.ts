@@ -20,7 +20,7 @@ export class AppService {
     return formattedDate;
   }
 
-  @Cron(CronExpression.EVERY_9_HOURS, {
+  @Cron(CronExpression.EVERY_2_HOURS, {
     name: 'Send log report',
     timeZone: 'Africa/Lagos',
   })
@@ -30,18 +30,18 @@ export class AppService {
     await this.mailService.sendMail({
       to: 'olojam4969@gmail.com',
       // from: '"Support Team" <support@example.com>', // override default from
-      subject: 'Welcome to Nice App! Confirm your Email',
+      subject: 'Kanban log report',
       template: './logs.hbs', 
       context: {
         name: 'Kanban support',
       },
       attachments: [
         {
-          filename: 'all-log-report',
+          filename: 'all-log-report.log',
           path: join(process.cwd(), `logs/${date}-combined.log`),
         },
         {
-          filename: 'error-log-report',
+          filename: 'error-log-report.log',
           path: join(process.cwd(), `logs/${date}-error.log`),
         },
       ],
