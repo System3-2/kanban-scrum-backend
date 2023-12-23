@@ -20,7 +20,7 @@ export class AppService {
     return formattedDate;
   }
 
-  @Cron(CronExpression.EVERY_2_HOURS, {
+  @Cron(CronExpression.EVERY_10_SECONDS, {
     name: 'Send log report',
     timeZone: 'Africa/Lagos',
   })
